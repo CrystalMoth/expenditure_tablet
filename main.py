@@ -1,10 +1,11 @@
 from calendar import weekday
 from datetime import datetime
+from multiprocessing.spawn import old_main_modules
 from posixpath import split
+import edit
+from matplotlib.pyplot import close
+from constants import*
 #Constants. DO NOT CHANGE THE FILE NAMES
-TEMP_FILE_NAME = "temp_work.txt"
-REC_FILE_NAME = "rec_work.txt"
-ROW_SKIP_COND = '#'
 
 # Global variables
 row_s = [] 
@@ -16,7 +17,34 @@ def temp_work_r():
         file_row = file_row.strip()
         if not "#" in file_row: # All but #-rows pass. Other row-excluding symbols may be added in the future...
             row_s.append(file_row)
-    print(row_s)
+    return row_s
+
+    
+
+
+
+
+def more_than_one(row_s):
+    for i in range(len(row_s)):
+        print(f"{i + 1}. {row_s[i]}")
+    print('''\nMultiple rows have been recorded. Would you like to do one of the following?:\n
+(1) Edit all of the rows
+(2) edit a spesific rowindex
+(3) Remove all of the rows''')
+    user_input = int(input())
+    if user_input == 1:
+        edit.edit_all()
+    elif user_input == 2:
+        edit.edit_one()
+    else:
+        edit.rm_all()
+
+def only_one(row_s):
+  pass
+
+
+def no_rows():
+    pass
 
 
 
@@ -28,14 +56,13 @@ def worked_hours_for_now(): #Let's the user input the time worked and saves it i
     todays_date = datetime.now()
     print("\nToday it is {}.{}.{}\n".format(str(todays_date.day), str(todays_date.month), str(todays_date.year)))
     row_s = temp_work_r()
-            
-
-    
-
-    
-
-
-
+    print(row_s)
+    if len(row_s) >= 2: # If temp_file has more than 2 rows, the user should want to view, make hanges, or remove.
+        more_than_one(row_s)
+    elif len(row_s) == 1:
+        only_one(row_s)
+    else:
+        no_rows()
     
 
 def worked_hours_for_today():
