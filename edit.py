@@ -1,5 +1,9 @@
 # Houses all functions that are peforming and edit on a file (means editing a file's name, editing a row or creating one)
 import file
+
+
+#Module handels file row editing (meaning rm's aswell)
+
 def edit_rows(file_name, lines):
     open(file_name, "w")
     print("\nEdit the line work period fully:\n")
