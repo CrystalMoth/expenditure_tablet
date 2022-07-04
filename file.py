@@ -11,4 +11,10 @@ def file_read(file_name):
 
 def file_write(file_name, lines):
     file = open(file_name, "a")
-    file.writelines(lines)
+    for i in lines:
+        file.writelines(i)
+
+
+def pretty_column(rows):
+    for i in range(len(rows)):
+        print(f"{i + 1}. {rows[i]}")
