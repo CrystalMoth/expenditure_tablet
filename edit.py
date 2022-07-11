@@ -6,7 +6,7 @@ import file
 
 def edit_rows(file_name, lines):
     open(file_name, "w")
-    print("\nEdit the line work period fully:\n")
+    print("\nEdit the line fully:\n")
     for row in lines:
         index = lines.index(row)
         print("Time period no.",index, row,"\n")
@@ -17,7 +17,7 @@ def edit_rows(file_name, lines):
 
 
 
-def edit_one(file_name):
+def edit_one_of_many(file_name):
     user_input = int(input("Choose a row number to edit it the row\n"))
     file = open(file_name)
     lines = file.readlines()  #Remember: user line - 1 = index
@@ -31,6 +31,18 @@ def edit_one(file_name):
         file.writelines(i)
 
     
+
+def edit_one(file_name):
+    file = open(file_name)
+    one_line = file.readlines()
+    print("Edit the line fully:\n", one_line, "\n")
+    modified_line = input()
+    modified_line = f"{modified_line}\n"
+    one_line = modified_line
+    return one_line
+
+
+
 
 
 

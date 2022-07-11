@@ -9,15 +9,14 @@ def file_read(file_name):
     for file_row in file_r:
         file_row = file_row.strip()
         if not "#" in file_row: # All but #-rows pass
-            if file_row != None:
-                lines.append(file_row)
-    print(lines, "lol")
+            lines.append(file_row)
     return lines
 
 def file_write(file_name, lines):
     file = open(file_name, "a")
     for i in lines:
         file.writelines(i)
+        file.writelines("\n")
 
 
 

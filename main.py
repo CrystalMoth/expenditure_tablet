@@ -1,3 +1,4 @@
+from multiprocessing.connection import answer_challenge
 import printz
 from multiprocessing.spawn import old_main_modules
 from posixpath import split
@@ -5,16 +6,16 @@ from time import sleep
 import file
 import edit
 from matplotlib.pyplot import close
+
 # This file houses all constants and possibly other variables that are going to be used in multiple modules
-TEMP_FILE_NAME = "temp_work.txt"
-REC_FILE_NAME = "rec_work.txt"
+TEMP_FILE_NAME = "TEMP_WORK.txt"
+REC_FILE_NAME = "REC_WORK.txt"
 ROW_SKIP_COND = '#'
 
 #Main program
-
 def back_to_menu():
     print("Returning to main menu")
-    sleep(1.5)
+    sleep(3)
     main()    
 
 
@@ -33,10 +34,10 @@ def more_than_one(rows):
         edit.rm_all(TEMP_FILE_NAME)
         print("Time periods have been stored\n")
         back_to_menu()
- 
+
     elif user_input == 2:
         printz.pretty_column(rows)
-        edit.edit_one(TEMP_FILE_NAME)
+        edit.edit_one_of_many(TEMP_FILE_NAME)
     else:
         edit.rm_all(TEMP_FILE_NAME)
 
@@ -44,16 +45,19 @@ def more_than_one(rows):
 def only_one(rows):
     print("Only one row found:\n")
     printz.pretty_column(rows)
-    user_input = int(input("\nPress 'Y' to edit.\n"))
+    user_input = input("\nPress 'Y' to edit.\n")
     if user_input == "y":
-        edit.edit_one()
+        edit.edit_one(TEMP_FILE_NAME)
+        print("Line edited succesfully\n")
+        back_to_menu()
+
     else:
         back_to_menu()
     
 
 
 def no_rows():
-    print("No rows detected\n")
+    print("\nNo rows detected\n")
     back_to_menu()
 
 def edit_work_time(): #Let's user input the time worked and saves it in a file containing temporary data to be moved elsewhere later (for_today-function)
@@ -70,13 +74,26 @@ def edit_work_time(): #Let's user input the time worked and saves it in a file c
     
 
 def rec_work_time():
+    rows = []
     print('''How to record your time:
     write "-" for a period of time you want to record. Example: 12-13
-    If you have multiple periods use ":". Example: 12-30: 14-15.20''')    
+    If you have multiple periods use ":". Example: 12-30: 14-15.20\n''')
+    user_input = input("Write the time period\n")
+    rows = [user_input]
+    print(user_input)
+    answer = input("\nWrite (y) to move the time to permanent storage\n")
+    if answer == "y":
+        file.file_write(REC_FILE_NAME, rows)
+        print("Row transfer was succesfull\n")
+        back_to_menu()
+    else:
+        print("Time period has been moved to temporary storage\n")
+        back_to_menu()
 
 
 def show_the_tablet():
-
+    printz.pretty_column(file.file_read(REC_FILE_NAME))
+    back_to_menu()
     pass
 
 def update_salary():
