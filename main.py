@@ -8,8 +8,7 @@ import edit
 from matplotlib.pyplot import close
 
 # This file houses all constants and possibly other variables that are going to be used in multiple modules
-TEMP_FILE_NAME = "TEMP_WORK.txt"
-REC_FILE_NAME = "REC_WORK.txt"
+EXPENSE_FILE = "expenses.txt"
 ROW_SKIP_COND = '#'
 
 #Main program
@@ -27,19 +26,19 @@ def more_than_one(rows):
 (3) Remove all of the rows''')
     user_input = int(input())
     if user_input == 1:
-        rows = file.file_read(TEMP_FILE_NAME)
-        rows = edit.edit_rows(TEMP_FILE_NAME, rows)
-        file.file_write(TEMP_FILE_NAME, rows)
-        file.file_write(REC_FILE_NAME, rows)
-        edit.rm_all(TEMP_FILE_NAME)
+        rows = file.file_read(EXPENSE_FILE)
+        rows = edit.edit_rows(EXPENSE_FILE, rows)
+        file.file_write(EXPENSE_FILE, rows)
+        file.file_write(EXPENSE_FILE, rows)
+        edit.rm_all(EXPENSE_FILE)
         print("Time periods have been stored\n")
         back_to_menu()
 
     elif user_input == 2:
         printz.pretty_column(rows)
-        edit.edit_one_of_many(TEMP_FILE_NAME)
+        edit.edit_one_of_many(EXPENSE_FILE)
     else:
-        edit.rm_all(TEMP_FILE_NAME)
+        edit.rm_all(EXPENSE_FILE)
 
 
 def only_one(rows):
@@ -47,7 +46,7 @@ def only_one(rows):
     printz.pretty_column(rows)
     user_input = input("\nPress 'Y' to edit.\n")
     if user_input == "y":
-        edit.edit_one(TEMP_FILE_NAME)
+        edit.edit_one(EXPENSE_FILE)
         print("Line edited succesfully\n")
         back_to_menu()
 
@@ -60,11 +59,11 @@ def no_rows():
     print("\nNo rows detected\n")
     back_to_menu()
 
-def edit_work_time(): #Let's user input the time worked and saves it in a file containing temporary data to be moved elsewhere later (for_today-function)
+def edit_expenses(): #Let's user input the time worked and saves it in a file containing temporary data to be moved elsewhere later (for_today-function)
 
     # Tells the user what day it is. (In case being used in the terminal and it is importan information)
     print("Today it is", printz.show_date())
-    temp_rows = file.file_read(TEMP_FILE_NAME)
+    temp_rows = file.file_read(EXPENSE_FILE)
     if len(temp_rows) >= 2:
         more_than_one(temp_rows)
     elif len(temp_rows) == 1:
@@ -73,30 +72,21 @@ def edit_work_time(): #Let's user input the time worked and saves it in a file c
         no_rows()
     
 
-def rec_work_time():
-    rows = []
-    print('''How to record your time:
-    write "-" for a period of time you want to record. Example: 12-13
-    If you have multiple periods use ":". Example: 12-30: 14-15.20\n''')
-    user_input = input("Write the time period\n")
-    rows = [user_input]
-    print(user_input)
-    answer = input("\nWrite (y) to move the time to permanent storage\n")
-    if answer == "y":
-        file.file_write(REC_FILE_NAME, rows)
-        print("Row transfer was succesfull\n")
-        back_to_menu()
-    else:
-        print("Time period has been moved to temporary storage\n")
-        back_to_menu()
+def rec_expenses():
+    user_input = input('''Write the name of the expense and the monthly pay seperated by (:) Note: Use Euros.
+    IF you want to write multipel expenses, simply seperate them by using comma  and a space (, )
+    Example: My_expense:12.5, another_one:7.25\n''')
+    file.file_write(EXPENSE_FILE, user_input)
+    print("Expenditures have been recorded\n")
+    back_to_menu()
 
 
-def show_the_tablet():
-    printz.pretty_column(file.file_read(REC_FILE_NAME))
+def show_the_table():
+    printz.pretty_column(file.file_read(EXPENSE_FILE))
     back_to_menu()
     pass
 
-def update_salary():
+def update_budget():
     pass
 
 
@@ -107,24 +97,24 @@ def main(): # This loop is the main if-clause. When error occurs or something al
 
     (1) Record the time worked
 
-    (2) edit the time worked for
+    (2) edit the expenditure(s)
 
-    (3) Display as a tablet the ammount of time worked
+    (3) Display all the expenditures
 
-    (4) Update the salary
+    (4) Update budget
 
     (5) Quit''')
 
     try:
         user_input = int(input())
         if user_input == 1:
-            rec_work_time()
+            rec_expenses()
         elif user_input == 2:
-            edit_work_time()
+            edit_expenses()
         elif user_input == 3:
-            show_the_tablet()
+            show_the_table()
         elif user_input == 4:
-            update_salary()
+            update_budget()
         elif user_input == 5:
             exit()
         else:
